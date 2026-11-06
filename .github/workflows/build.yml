@@ -1,0 +1,48 @@
+
+name: Build Ryuma Tweak
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check source
+        run: |
+          set -e
+          test -f Ryuma.xm
+          echo "Source file found"
+
+      - name: Build dylib
+        run: |
+          set -e
+          mkdir -p build
+          cp Ryuma.xm Ryuma.m
+
+          xcrun --sdk iphoneos clang \
+            -arch arm64 \
+            -miphoneos-version-min=14.0 \
+            -dynamiclib \
+            -fobjc-arc \
+            -fblocks \
+            -framework UIKit \
+            -framework Foundation \
+            Ryuma.m \
+            -o build/Ryuma.dylib
+
+          test -s build/Ryuma.dylib
+          file build/Ryuma.dylib
+
+      - name: Upload dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ryuma-dylib
+          path: build/Ryuma.dylib
