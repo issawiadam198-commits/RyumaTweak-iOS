@@ -1,0 +1,9 @@
+Package: com.ryuma.tweak
+Name: Ryuma
+Version: 1.0
+Architecture: iphoneos-arm64
+Description: Ryuma login
+Maintainer: Ryuma
+Author: Ryuma
+Section: Tweaks
+Depends: mobilesubstrate
